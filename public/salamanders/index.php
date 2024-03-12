@@ -24,7 +24,7 @@ include(SHARED_PATH . '/salamander-header.php');
 
 <h1>Salamanders</h1>
 
-  <a href="#">Create Salamander</a>
+  <a href="<?php echo urlFor('/salamanders/new.php'); ?>">Create Salamander</a>
 
 <table>
   <tr>
@@ -43,7 +43,7 @@ include(SHARED_PATH . '/salamander-header.php');
       <td><?php echo h($sally['id']); ?></td>
       <td><?php echo h($sally['name']); ?></td>
       <td><a href="<?php echo urlFor('salamanders/show.php?id='. h(u($sally['id']))); ?>">View</a></td>
-      <td><a href="#">Edit</a></td>
+      <td><a href="<?php echo urlFor('salamanders/edit.php?id='. h(u($sally['id']))); ?>">Edit</a></td>
       <td><a href="#">Delete</a></td>
     </tr>
   <?php } ?>
