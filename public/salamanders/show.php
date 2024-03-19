@@ -10,7 +10,7 @@ $pageTitle = 'Salamander Details';
 include(SHARED_PATH . '/salamander-header.php');
 ?>
 
-<h2>Salamander Details</h2>
+<h2>This is a Stub for Salamander Details</h2>
 <!-- <p> Page ID: Use the h() function and pass in the id/p> -->
 <?php echo h($id); ?>
 <p><a href="<?php echo urlFor('/salamanders/index.php'); ?>">&laquo; Back to Salamander List</a></p>
