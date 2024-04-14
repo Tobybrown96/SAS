@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS salamanders;
 USE salamanders;
 DROP TABLE IF EXISTS salamander;
 CREATE TABLE `salamander` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL  PRIMARY KEY  AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `habitat` text,
   `description` text,

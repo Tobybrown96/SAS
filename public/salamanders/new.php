@@ -18,8 +18,14 @@ include(SHARED_PATH . '/salamander-header.php');
 
 <h1>Create Salamander</h1>
 <form action="<?= urlFor('/salamanders/create.php'); ?>" method="post">
-  <label for="sallyName">Name</label><br>
-  <input type="text" id="sallyName" name="Name"><br>
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name"><br>
+
+  <label for="habitat">Habitat:</label><br>
+  <textarea id="habitat" rows="4" cols="50" name="habitat"></textarea><br>
+
+  <label for="description">Description:</label><br>
+  <textarea id="description" rows="4" cols="50" name="description"></textarea><br>
 
   <input type="submit" value="Create Salamander">
 </form>
