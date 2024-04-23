@@ -23,14 +23,40 @@
     return $sally; // returns an assoc. array
   }
 
-  function insert_sally($name, $habitat, $description) {
+  function validate_sally($sally) {
+    $errors = [];
+
+    // name
+    if(is_blank($sally['name'])) {
+      $errors[] = "Name cannot be blank.";
+    }
+    if(!has_length($sally['name'], ['min' => 2, 'max' => 255])) {
+      $errors[] = "Name must be between 2 and 255 characters.";
+    }
+    if(is_blank($sally['description'])) {
+      $errors[] = "Description cannot be blank.";
+    }
+    if(is_blank($sally['habitat'])) {
+      $errors[] = "Habitat cannot be blank.";
+    }
+
+    return $errors;
+  }
+
+  function insert_sally($sally) {
     global $db;
+
+    $errors = validate_sally($sally);
+    if(!empty($errors)) {
+      return $errors;
+    }
+
     $sql = "INSERT INTO salamander ";
     $sql .= "(name, habitat, description) ";
     $sql .= "VALUES (";
-    $sql .= "'" . $name . "',";
-    $sql .= "'" . $habitat . "',";
-    $sql .= "'" . $description . "'";
+    $sql .= "'" . $sally['name'] . "',";
+    $sql .= "'" . $sally['habitat'] . "',";
+    $sql .= "'" . $sally['description'] . "'";
     $sql .= ")";
     $result = mysqli_query($db, $sql);
     // For INSERT statements, $result is true/false
@@ -42,11 +68,15 @@
       db_disconnect($db);
       exit;
     }
-
   }
 
   function update_sally($sally) {
     global $db;
+
+    $errors = validate_sally($sally);
+    if(!empty($errors)) {
+      return $errors;
+    }
 
     $sql = "UPDATE salamander SET ";
     $sql .= "name='" . $sally['name'] . "', ";
@@ -65,7 +95,6 @@
       db_disconnect($db);
       exit;
     }
-
   }
 
   function delete_sally($id) {
@@ -86,7 +115,5 @@
       exit;
     }
   }
-
-
 
 ?>

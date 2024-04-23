@@ -13,7 +13,12 @@ if(is_post_request()) {
   $sally['description'] = $_POST['description'] ?? '';
 
   $result = update_sally($sally);
-  redirect_to(urlFor('/salamanders/show.php?id=' . $id));
+  if($result === true) {
+    redirect_to(urlFor('/salamanders/show.php?id=' . $id));
+  } else {
+    $errors = $result;
+    //var_dump($errors);
+  }
 
 } else {
   $sally = find_sally_by_id($id);
@@ -26,6 +31,9 @@ include(SHARED_PATH . '/salamander-header.php');
 <a href="<?= urlFor('/salamanders/index.php'); ?>">&laquo; Back to list</a>
 
 <h1>Edit Salamander</h1>
+
+<?php echo display_errors($errors); ?>
+
 <form action="<?= urlFor('/salamanders/edit.php?id=' . h(u($id))); ?>" method="post">
   <label for="name">Name</label><br>
   <input type="text" id="name" name="name" value="<?php echo h($sally['name']); ?>"><br>
