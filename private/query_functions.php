@@ -13,14 +13,19 @@
 
   function find_sally_by_id($id) {
     global $db;
-
-    $sql = "SELECT * FROM salamander ";
-    $sql .= "WHERE id='" . $id . "'";
-    $result = mysqli_query($db, $sql);
-    confirm_result_set($result);
-    $sally = mysqli_fetch_assoc($result);
-    mysqli_free_result($result);
-    return $sally; // returns an assoc. array
+  
+    $sql = "SELECT * FROM salamander WHERE id=?";
+    $stmt = mysqli_prepare($db, $sql);
+  
+    mysqli_stmt_bind_param($stmt, "i", $id);
+  
+    if(!mysqli_stmt_execute($stmt)) {
+      echo "Error Finding Salamander: " . mysqli_error($db);
+    } else {
+      $result = mysqli_stmt_get_result($stmt);
+      $sally = mysqli_fetch_assoc($result);
+      return $sally;
+    }
   }
 
   function validate_sally($sally) {
@@ -51,14 +56,16 @@
       return $errors;
     }
 
-    $sql = "INSERT INTO salamander ";
-    $sql .= "(name, habitat, description) ";
-    $sql .= "VALUES (";
-    $sql .= "'" . $sally['name'] . "',";
-    $sql .= "'" . $sally['habitat'] . "',";
-    $sql .= "'" . $sally['description'] . "'";
-    $sql .= ")";
-    $result = mysqli_query($db, $sql);
+    $sql = "INSERT INTO salamander (name, habitat, description) ";
+    $sql .= "VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($db, $sql);
+
+    mysqli_stmt_bind_param($stmt, "sss", $name, $habitat, $description);
+    $name = $sally['name'];
+    $habitat = $sally['habitat'];
+    $description = $sally['description'];
+
+    $result = mysqli_stmt_execute($stmt);
     // For INSERT statements, $result is true/false
     if($result) {
       return true;
@@ -78,14 +85,16 @@
       return $errors;
     }
 
-    $sql = "UPDATE salamander SET ";
-    $sql .= "name='" . $sally['name'] . "', ";
-    $sql .= "habitat='" . $sally['habitat'] . "', ";
-    $sql .= "description='" . $sally['description'] . "' ";
-    $sql .= "WHERE id='" . $sally['$id'] . "' ";
-    $sql .= "LIMIT 1";
-  
-    $result = mysqli_query($db, $sql);
+    $sql = "UPDATE salamander SET name = ?, habitat = ?, description = ? WHERE id = ? LIMIT 1";
+    $stmt = mysqli_prepare($db, $sql);
+
+    mysqli_stmt_bind_param($stmt, "sssi", $name, $habitat, $description, $id);
+    $name = $sally['name'];
+    $habitat = $sally['habitat'];
+    $description = $sally['description'];
+    $id = $sally['id'];
+
+    $result = mysqli_stmt_execute($stmt);
     // For UPDATE statements, $result is true/false
     if($result) {
       return true;
